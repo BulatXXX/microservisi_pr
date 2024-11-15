@@ -6,7 +6,7 @@ from pydantic import BaseModel, validator
 from datetime import datetime, timedelta
 
 
-from staff_management.app.models.task import TaskStatus
+from app.models.task import TaskStatus
 
 
 class TaskCreate(BaseModel):

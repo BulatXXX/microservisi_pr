@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from staff_management.app.database import get_db
-from staff_management.app.models.task import Task, TaskStatus, Staff
+from app.database import get_db
+from app.models.task import Task, TaskStatus, Staff
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 
-from staff_management.app.schemas.task_schema import TaskResponse, TaskCreate
+from app.schemas.task_schema import TaskResponse, TaskCreate
 
 router = APIRouter()
 

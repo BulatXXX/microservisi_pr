@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
-from staff_management.app.database import engine, Base
-from staff_management.app.routers import tasks_router
+from app.database import engine, Base
+from app.routers import tasks_router
 
-
+Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Staff Management API")
 
 @app.on_event("startup")
