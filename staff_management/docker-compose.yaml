@@ -13,18 +13,27 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Автоматическое выполнение
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # Для приложений
+      - "15672:15672"  # Для доступа к панели управления
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
   api:
     build:
       context: .
     container_name: api
-    restart: always
     environment:
       DATABASE_URL: "postgresql://postgres:1@postgres:5432/staff_management"
-    ports:
-      - "8000:8000"
+      RABBITMQ_HOST: "rabbitmq"
     depends_on:
+      - rabbitmq
       - postgres
 
 volumes:
