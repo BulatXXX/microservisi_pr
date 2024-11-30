@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  staff_management_service:
+    build:
+      context: ./staff_management_service
+      dockerfile: Dockerfile
+    container_name: staff_management_service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - staff_management_db
+    environment:
+      - DATABASE_URL=postgresql://postgres:1@staff_management_db:5432/staff_management
+
+  staff_management_db:
+    image: postgres:13
+    container_name: staff_management_db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: staff_management
+    volumes:
+      - staff_db_data:/var/lib/postgresql/data
+      - ./staff_management_service/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  staff_db_data:
