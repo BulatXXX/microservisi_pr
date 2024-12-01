@@ -2,63 +2,24 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional, List
 
-# Схемы для Category
-class CategoryBase(BaseModel):
+
+class CategoryCreate(BaseModel):
     name: str
 
-class CategoryCreate(CategoryBase):
-    pass
-
-class CategoryResponse(CategoryBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
+class CategoryUpdate(BaseModel):
+    name: str
 
 # Схемы для Product
 class ProductBase(BaseModel):
     name: str
     category_id: int
-    expiry_date: Optional[datetime]
+    expiry_date: Optional[datetime] = None
 
 class ProductCreate(ProductBase):
     pass
 
-class ProductResponse(ProductBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-# Схемы для SupplyList
-class SupplyListBase(BaseModel):
-    name: str
-    item_count: int
-
-class SupplyListCreate(SupplyListBase):
-    pass
-
-class SupplyListResponse(SupplyListBase):
-    id: int
-
-    class Config:
-        orm_mode = True
-
-
-# Схемы для Delivery
-class DeliveryBase(BaseModel):
-    list_id: int
-    creation_date: datetime
-    status: str
-    description: Optional[str]
-
-class DeliveryCreate(DeliveryBase):
-    pass
-
-class DeliveryResponse(DeliveryBase):
-    id: int
-
-    class Config:
-        orm_mode = True
+class DeliveryCreate(BaseModel):
+    title: str
+    list: str  # Сохраняем список в формате JSON строки
+    status: str = "Pending"  # Можно указать статус по умолчанию
+    description: str = None
