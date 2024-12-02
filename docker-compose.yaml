@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+
   staff_management_service:
     build:
       context: ./staff_management_service
@@ -12,6 +13,22 @@ services:
       - staff_management_db
     environment:
       - DATABASE_URL=postgresql://postgres:1@staff_management_db:5432/staff_management
+    networks:
+      - hotel_network
+
+
+  supply_management_service:
+    build:
+      context: ./warehouse_management_service
+      dockerfile: Dockerfile
+    depends_on:
+      - staff_management_db
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://postgres:1@staff_management_db:5432/supply_management
+    networks:
+      - hotel_network
 
   staff_management_db:
     image: postgres:13
@@ -25,6 +42,13 @@ services:
     volumes:
       - staff_db_data:/var/lib/postgresql/data
       - ./staff_management_service/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./warehouse_management_service/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - hotel_network
+
+networks:
+  hotel_network:
+    driver: bridge
 
 volumes:
   staff_db_data:

@@ -1,11 +1,9 @@
 from datetime import datetime, timedelta
-from typing import List
+
 
 import requests
 from fastapi import FastAPI, Depends, HTTPException
 from typing import Annotated
-
-from sqlalchemy import func
 
 from database import engine, SessionLocal, Base
 from sqlalchemy.orm import Session, aliased
@@ -145,7 +143,7 @@ async def create_delivery(delivery: DeliveryCreate, db: Session = Depends(get_db
     }
 
     # Отправка задачи на другой сервис
-    task_response = requests.post("http://127.0.0.1:8000/tasks", json=task_data)  # Другой сервис работает на порту 8000
+    task_response = requests.post("http://staff_management_service:8000/tasks", json=task_data)  # Другой сервис работает на порту 8000
 
     if task_response.status_code != 200:
         raise HTTPException(status_code=task_response.status_code, detail=task_response.text)
